@@ -19,18 +19,30 @@
 ** License along with DroidPlugin.  If not, see <http://www.gnu.org/licenses/lgpl.txt>
 **
 **/
-
 package com.morgoo.helper.compat;
 
+import android.os.IBinder;
+
+import com.morgoo.droidplugin.reflect.MethodUtils;
+
+import java.lang.reflect.InvocationTargetException;
+
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/4/13.
+ * Created by zhangyong8 on 16/5/9.
  */
-public class PackageManagerCompat {
-    public static final int DELETE_FAILED_INTERNAL_ERROR = -1;
-    public static final int DELETE_SUCCEEDED = 1;
-    public static final int INSTALL_SUCCEEDED = 1;
-    public static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
-    public static final int INSTALL_FAILED_INVALID_APK = -2;
-    public static final int INSTALL_REPLACE_EXISTING = 0x00000002;
-    public static final int INSTALL_FAILED_ALREADY_EXISTS = -1;
-    public static final int INSTALL_FAILED_NOT_SUPPORT_ABI = -3;}
+public class IMmsCompat {
+
+    private static Class sClass;
+
+    public static Class Class() throws ClassNotFoundException {
+        if (sClass == null) {
+            sClass = Class.forName("com.android.internal.telephony.IMms");
+        }
+        return sClass;
+    }
+
+    public static Object asInterface(IBinder binder) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Class clazz = Class.forName("com.android.internal.telephony.IMms$Stub");
+        return MethodUtils.invokeStaticMethod(clazz, "asInterface", binder);
+    }
+}
